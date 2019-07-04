@@ -1,5 +1,5 @@
 pkg.env = new.env()
-pkg.env$con = DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
+pkg.env$cons = list()
 
 #' Execute a SQL query on a table and return a data frame
 #'
@@ -75,8 +75,13 @@ load_table = function(path, table) {
     empty.d = readr::read_csv(paste0(paste(col_names, collapse=","), "\n"),
         col_types=col_types)
 
-    dplyr::copy_to(pkg.env$con, empty.d, table)
-    d = dplyr::tbl(pkg.env$con, table)
+    con = pkg.env$cons[[path]]
+    if (is.null(con)) {
+        con = DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
+        pkg.env$cons[[path]] = con
+    }
+    dplyr::copy_to(con, empty.d, table)
+    d = dplyr::tbl(con, table)
     attr(d, "path") = path
     return(d)
 }
