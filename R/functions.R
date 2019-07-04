@@ -42,14 +42,11 @@ run_sql = function(path, query) {
 auth = function() {
     if (Sys.getenv("SQL_KEY") == "") {
         key = readline("Database key: ")
-        Sys.setenv(HOT_KEY=key)
+        Sys.setenv(SQL_KEY=key)
     } else {
         key = Sys.getenv("SQL_KEY")
     }
     return(key)
-    #cmd_args = c("rsautl", "-decrypt", "-oaep", "-inkey", "~/.ssh/id_rsa",
-    #             "-in", key_path)
-    #t = system2("openssl", cmd_args, stdout=T, stdin="")
 }
 
 
