@@ -2,6 +2,7 @@ Package: RSQLCipher
 Title: SQLCipher in R
 Version: 0.0.0.9000
 Authors@R: person("Cory", "McCartan", email = "none", role = c("aut", "cre"))
+Maintainer: Cory McCartan <anonymous@noname.org>
 Description: Allows one to perform a SQL query against a SQLCipher-encrypted 
     database and save the result to a data frame.
 Depends: R (>= 3.6.0)
