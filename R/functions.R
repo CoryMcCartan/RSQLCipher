@@ -64,8 +64,8 @@ load_table = function(path, table) {
     idx_end = which.max(stringr::str_detect(schema, "\\)")) - 1
     schema = schema[idx_start:idx_end]
     # extract names and types
-    col_names = stringr::str_match(schema, "^  (\\w+)")[,2]
-    col_types = stringr::str_match(schema, "^  \\w+ (\\w+)")[,2]
+    col_names = stringr::str_match(schema, "^  (\\S+)")[,2]
+    col_types = stringr::str_match(schema, "^  \\S+ (\\w+)")[,2]
     col_types = stringr::str_replace(col_types, "text", "c")
     col_types = stringr::str_replace(col_types, "integer", "i")
     col_types = stringr::str_replace(col_types, "real", "d")
