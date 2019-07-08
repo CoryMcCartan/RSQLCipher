@@ -4,7 +4,7 @@
 \alias{load_table}
 \title{Load a table from an encrypted SQL database.}
 \usage{
-load_table(path, table, type_overrides)
+load_table(path, table, type_overrides = NULL)
 }
 \arguments{
 \item{path}{A character vector containing the path to the database.}
