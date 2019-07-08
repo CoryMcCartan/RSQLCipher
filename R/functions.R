@@ -74,9 +74,9 @@ load_table = function(path, table, type_overrides=NULL) {
     # extract names and types
     col_names = stringr::str_match(schema, "^  (\\S+)")[,2]
     col_types = stringr::str_match(schema, "^  \\S+ (\\w+)")[,2]
-    col_types = stringr::str_replace(col_types, "text", "c")
-    col_types = stringr::str_replace(col_types, "integer", "i")
-    col_types = stringr::str_replace(col_types, "real", "d")
+    col_types = stringr::str_replace(col_types, "text|TEXT", "c")
+    col_types = stringr::str_replace(col_types, "integer|INT", "i")
+    col_types = stringr::str_replace(col_types, "real|REAL", "d")
     names(col_types) = col_names
     col_types[names(type_overrides)] = type_overrides
     col_types = paste(col_types, collapse="")
