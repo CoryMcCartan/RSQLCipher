@@ -4,12 +4,16 @@
 \alias{load_table}
 \title{Load a table from an encrypted SQL database.}
 \usage{
-load_table(path, table)
+load_table(path, table, type_overrides)
 }
 \arguments{
 \item{path}{A character vector containing the path to the database.}
 
 \item{table}{A character vector containing the table name to load.}
+
+\item{type_overrides}{A named character vector of the form 
+\code{c(col_name=col_type)}, where col_type is one of \code{"c", "i", 
+"d"}, etc., giving the column names and types to override.}
 }
 \value{
 An empty \link[tibble]{tibble} with the column names and types loaded
