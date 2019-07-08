@@ -5,22 +5,22 @@ pkg.env$cons = list()
 #'
 #' @param df A table or lazy query, returned from \link{load_table} and
 #'   \link[dplyr]{dplyr} functions.
-#' @param enforce_types Should column types be inferred from the input types,
+#' @param infer_types Should column types be inferred from the input types,
 #'   and be enforced when the data frame is constructed from the SQL output.
+#'   Ignored if \code{col_types} is provided.
 #' @param col_types A compact string representation (e.g., "icidd") giving the 
-#'      column names and types for the result. 
-#'      Ignored if \code{enforce_types=F}.
+#'   column names and types for the result. 
 #' @return A \link[tibble]{tibble} containing the queried data.
 #' @export
-execute = function(df, enforce_types=F, col_types=NULL) {
+execute = function(df, infer_types=F, col_types=NULL) {
     path = attr(df, "path")
     query = paste0(dbplyr::sql_render(df)[1], ";")
     result = run_sql(path, query)
-    if (enforce_types) {
-        if (is.null(col_types)) {
-            col_types = sapply(as.data.frame(df), class)
-            col_types = paste(stringr::str_sub(col_types, 1, 1), collapse="")
-        }
+    if (infer_types) {
+        col_types = sapply(as.data.frame(df), class)
+        col_types = paste(stringr::str_sub(col_types, 1, 1), collapse="")
+        return(readr::read_csv(result, col_types=col_types))
+    } else if (!is.null(col_types)) {
         return(readr::read_csv(result, col_types=col_types))
     } else {
         return(readr::read_csv(result))
