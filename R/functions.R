@@ -8,8 +8,8 @@ pkg.env$cons = list()
 #' @param infer_types Should column types be inferred from the input types,
 #'   and be enforced when the data frame is constructed from the SQL output.
 #'   Ignored if \code{col_types} is provided.
-#' @param col_types A compact string representation (e.g., "icidd") giving the 
-#'   column names and types for the result. 
+#' @param col_types A compact string representation (e.g., "icidd") giving the
+#'   column names and types for the result.
 #' @return A \link[tibble]{tibble} containing the queried data.
 #' @export
 execute = function(df, infer_types=F, col_types=NULL) {
@@ -59,8 +59,8 @@ auth = function() {
 #'
 #' @param path A character vector containing the path to the database.
 #' @param table A character vector containing the table name to load.
-#' @param type_overrides A named character vector of the form 
-#'      \code{c(col_name=col_type)}, where col_type is one of \code{"c", "i", 
+#' @param type_overrides A named character vector of the form
+#'      \code{c(col_name=col_type)}, where col_type is one of \code{"c", "i",
 #'      "d"}, etc., giving the column names and types to override.
 #' @return An empty \link[tibble]{tibble} with the column names and types loaded
 #' from the database.
@@ -72,16 +72,15 @@ load_table = function(path, table, type_overrides=NULL) {
     idx_end = which.max(stringr::str_detect(schema, "\\)")) - 1
     schema = schema[idx_start:idx_end]
     # extract names and types
-    col_names = stringr::str_match(schema, "^  (\\S+)")[,2]
-    col_types = stringr::str_match(schema, "^  \\S+ (\\w+)")[,2]
-    col_types = stringr::str_replace(col_types, "text|TEXT", "c")
+    col_names = stringr::str_match(schema, "^\\s+([^\\s,]+)")[,2]
+    col_types = stringr::str_match(schema, "^\\s+[^\\s,]+ (\\w+)")[,2]
+    col_types = stringr::str_replace(col_types, "text|TEXT|character", "c")
     col_types = stringr::str_replace(col_types, "integer|INT", "i")
     col_types = stringr::str_replace(col_types, "real|REAL", "d")
+    col_types[is.na(col_types)] = "?"
     names(col_types) = col_names
     col_types[names(type_overrides)] = type_overrides
     col_types = paste(col_types, collapse="")
-
-
 
     # create empty data frame and augment with metadata
     empty.d = readr::read_csv(paste0(paste(col_names, collapse=","), "\n"),
@@ -97,3 +96,4 @@ load_table = function(path, table, type_overrides=NULL) {
     attr(d, "path") = path
     return(d)
 }
+
