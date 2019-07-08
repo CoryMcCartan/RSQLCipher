@@ -54,10 +54,13 @@ auth = function() {
 #'
 #' @param path A character vector containing the path to the database.
 #' @param table A character vector containing the table name to load.
+#' @param type_overrides A named character vector of the form 
+#'      \code{c(col_name=col_type)}, where col_type is one of \code{"c", "i", 
+#'      "d"}, etc., giving the column names and types to override.
 #' @return An empty \link[tibble]{tibble} with the column names and types loaded
 #' from the database.
 #' @export
-load_table = function(path, table) {
+load_table = function(path, table, type_overrides) {
     # read schema through SQL
     schema = run_sql(path, paste(".schema", table))
     idx_start = which.max(stringr::str_detect(schema, "\\(")) + 1
@@ -69,7 +72,11 @@ load_table = function(path, table) {
     col_types = stringr::str_replace(col_types, "text", "c")
     col_types = stringr::str_replace(col_types, "integer", "i")
     col_types = stringr::str_replace(col_types, "real", "d")
+    names(col_types) = col_names
+    col_types[names(type_overrides)] = type_overrides
     col_types = paste(col_types, collapse="")
+
+
 
     # create empty data frame and augment with metadata
     empty.d = readr::read_csv(paste0(paste(col_names, collapse=","), "\n"),
@@ -80,7 +87,7 @@ load_table = function(path, table) {
         con = DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
         pkg.env$cons[[path]] = con
     }
-    dplyr::copy_to(con, empty.d, table)
+    dplyr::copy_to(con, empty.d, table, overwrite=T)
     d = dplyr::tbl(con, table)
     attr(d, "path") = path
     return(d)
