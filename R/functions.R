@@ -60,7 +60,7 @@ auth = function() {
 #' @return An empty \link[tibble]{tibble} with the column names and types loaded
 #' from the database.
 #' @export
-load_table = function(path, table, type_overrides) {
+load_table = function(path, table, type_overrides=NULL) {
     # read schema through SQL
     schema = run_sql(path, paste(".schema", table))
     idx_start = which.max(stringr::str_detect(schema, "\\(")) + 1
