@@ -4,18 +4,18 @@
 \alias{execute}
 \title{Execute a SQL query on a table and return a data frame}
 \usage{
-execute(df, enforce_types = F, col_types = NULL)
+execute(df, infer_types = F, col_types = NULL)
 }
 \arguments{
 \item{df}{A table or lazy query, returned from \link{load_table} and
 \link[dplyr]{dplyr} functions.}
 
-\item{enforce_types}{Should column types be inferred from the input types,
-and be enforced when the data frame is constructed from the SQL output.}
+\item{infer_types}{Should column types be inferred from the input types,
+and be enforced when the data frame is constructed from the SQL output.
+Ignored if \code{col_types} is provided.}
 
 \item{col_types}{A compact string representation (e.g., "icidd") giving the 
-column names and types for the result. 
-Ignored if \code{enforce_types=F}.}
+column names and types for the result.}
 }
 \value{
 A \link[tibble]{tibble} containing the queried data.
